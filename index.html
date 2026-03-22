@@ -44,15 +44,14 @@
 
     const steps = [
         { text: "Wait lang... may itatanong sana ako.", img: "https://media.giphy.com/media/BNlSrpW0e4nbgVZ2we/giphy.gif", btn: "Ano yun?" },
-        { text: "Valentines is so so so so so malapit na right?!", img: "https://media.giphy.com/media/LBb735fuQwRKAVzN23/giphy.gif", btn: "Kaya nga eh" },
-        { text: "Gusto mo ba humabol idol?", img: "https://media.giphy.com/media/pY8jLmZw0ElqvVeRH4/giphy.gif", btn: "Paano?" },
-        { text: "Will you be my Valentine?", img: "https://media.giphy.com/media/pY8jLmZw0ElqvVeRH4/giphy.gif", btn: "Yes! ❤️" }
+        { text: "Diba since ano...", img: "https://media.giphy.com/media/LBb735fuQwRKAVzN23/giphy.gif", btn: "Next" },
+        { text: "Next page pa haha", img: "https://media.giphy.com/media/pY8jLmZw0ElqvVeRH4/giphy.gif", btn: "Next" },
+        { text: "Pwede ba tayo lumabas kapag free ka?", img: "https://media.giphy.com/media/pY8jLmZw0ElqvVeRH4/giphy.gif", btn: "Yes! ❤️" }
     ];
 
     function startApp() {
         const inputVal = document.getElementById('userName').value.trim();
         
-        // ADMIN TRIGGER: Direct to Formspree Dashboard
         if (inputVal.toLowerCase() === "admin") {
             const pass = prompt("Verification required:");
             if (pass === "12345") {
@@ -83,11 +82,11 @@
             imgElement.src = steps[step].img;
             mainBtn.innerHTML = steps[step].btn;
             
-            // Static No button only on step 3
-            noBtn.style.display = (step === 3) ? 'block' : 'none';
+            // Show "No" button only on the actual question (the last item in the array)
+            noBtn.style.display = (step === steps.length - 1) ? 'block' : 'none';
             step++;
         } else if (step === steps.length) {
-            textElement.innerText = "May gusto ka pa ba sabihin?";
+            textElement.innerText = "Ano say mo hehe";
             document.getElementById('messageInput').style.display = 'block';
             mainBtn.innerText = "Submit Answer";
             noBtn.style.display = 'none';
@@ -102,7 +101,6 @@
         const mainBtn = document.getElementById('mainBtn');
         mainBtn.innerText = "Sending...";
 
-        // Integrated your actual Formspree ID: mdawvqle
         fetch('https://formspree.io/f/mdawvqle', {
             method: 'POST',
             body: JSON.stringify({
