@@ -13,7 +13,7 @@
         .btn { padding: 12px 25px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; background-color: #b3b3ff; color: white; transition: 0.3s; width: 100%; }
         .btn:hover { background-color: #9999ff; }
         .btn-container { display: flex; justify-content: center; height: 50px; gap: 20px; }
-        #noBtn { display: none; background-color: #ffb3b3; } /* Simple static No button */
+        #noBtn { display: none; background-color: #ffb3b3; } 
         #noBtn:hover { background-color: #ff9999; }
         #messageInput { display: none; }
     </style>
@@ -52,7 +52,7 @@
     function startApp() {
         const inputVal = document.getElementById('userName').value.trim();
         
-        // ADMIN TRIGGER: Takes you directly to Formspree login
+        // ADMIN TRIGGER: Direct to Formspree Dashboard
         if (inputVal.toLowerCase() === "admin") {
             const pass = prompt("Verification required:");
             if (pass === "12345") {
@@ -83,7 +83,7 @@
             imgElement.src = steps[step].img;
             mainBtn.innerHTML = steps[step].btn;
             
-            // Show "No" button only on the final question
+            // Static No button only on step 3
             noBtn.style.display = (step === 3) ? 'block' : 'none';
             step++;
         } else if (step === steps.length) {
@@ -102,8 +102,8 @@
         const mainBtn = document.getElementById('mainBtn');
         mainBtn.innerText = "Sending...";
 
-        // REPLACE 'YOUR_ID_HERE' with your actual Formspree ID
-        fetch('https://formspree.io/f/YOUR_ID_HERE', {
+        // Integrated your actual Formspree ID: mdawvqle
+        fetch('https://formspree.io/f/mdawvqle', {
             method: 'POST',
             body: JSON.stringify({
                 name: userName,
@@ -128,7 +128,7 @@
         document.getElementById('text').innerHTML = "Okay, see you soon! 🥰"; 
         document.getElementById('noBtn').style.display = 'none'; 
         document.getElementById('mainBtn').style.display = 'none';
-        document.getElementById('displayImg').src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjZ6NXp2Z2Z6NXp2Z2Z6NXp2Z2Z6NXp2Z2Z6NXp2Z2Z6NXp2JmVwPXYxX2dpZnNfc2VhcmNoJmN0PWc/OPU6wUKARA8QE/giphy.gif";
+        document.getElementById('displayImg').src = "https://media.giphy.com/media/OPU6wUKARA8QE/giphy.gif";
     }
 </script>
 </body>
