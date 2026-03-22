@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wala lang</title>
+    <style>
+        body {
+            background-color: #e6e6ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 350px;
+            position: relative;
+        }
+        img {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        h1 { color: #555; font-size: 1.2rem; margin-bottom: 30px; line-height: 1.4; min-height: 3.5rem; }
+        .btn-container { display: flex; justify-content: center; height: 50px; gap: 20px; }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #b3b3ff;
+            color: white;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        #noBtn { position: absolute; z-index: 999; display: none; }
+    </style>
+</head>
+<body>
+
+<audio id="happyMusic">
+    <source src="https://www.myinstants.com/media/sounds/happy-happy-happy-song.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+    <img id="displayImg" src="https://media.giphy.com/media/6hKL8BI8rRNrMRFtAx/giphy.gif" alt="Cat">
+    <h1 id="text">Hi Claire</h1>
+    
+    <div class="btn-container">
+        <button id="mainBtn" class="btn" onclick="nextStep()">tap tap</button>
+        <button id="noBtn" class="btn" onmouseover="moveNo()">No</button>
+    </div>
+</div>
+
+<script>
+    let step = 0;
+    const imgElement = document.getElementById('displayImg');
+    const textElement = document.getElementById('text');
+    const mainBtn = document.getElementById('mainBtn');
+    const noBtn = document.getElementById('noBtn');
+    const happyMusic = document.getElementById('happyMusic'); // Reference to the audio
+
+    const steps = [
+        { text: "soooooooooooooo... <br> .....", img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2d3YWR4djliMnAzb3U3bWVseTc1a2RubTNxamlvM2tpeThlNnlweCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/BNlSrpW0e4nbgVZ2we/giphy.gif", btn: "So what!" },
+        { text: "Valentines is so so so so so malapit na right?!", img: "https://media.giphy.com/media/LBb735fuQwRKAVzN23/giphy.gif", btn: "Kaya nga eh" },
+        { text: "Gusto mo ba humabol idol?", img: "https://media.giphy.com/media/pY8jLmZw0ElqvVeRH4/giphy.gif", btn: "Paano?" },
+        { text: "Will you be my valentine?", img: "https://media.giphy.com/media/pY8jLmZw0ElqvVeRH4/giphy.gif", btn: "Yes!" }
+    ];
+
+    function nextStep() {
+        if (step < steps.length) {
+            textElement.innerHTML = steps[step].text;
+            imgElement.src = steps[step].img;
+            mainBtn.innerHTML = steps[step].btn;
+            
+            if (step === 3) {
+                noBtn.style.display = 'block';
+                noBtn.style.position = 'relative';
+                noBtn.style.left = 'auto';
+                noBtn.style.top = 'auto';
+            } else {
+                noBtn.style.display = 'none';
+            }
+            step++;
+        } else {
+            // YEHEY screen
+            textElement.innerHTML = "yon ohhh ";
+            imgElement.src = "https://media.giphy.com/media/TjSPQgowhhJdHgvnwA/giphy.gif";
+            mainBtn.style.display = 'none';
+            noBtn.style.display = 'none';
+            
+            // Play the music
+            happyMusic.play();
+        }
+    }
+
+    function moveNo() {
+        textElement.innerHTML = "pleaseee??? <br>Sige na ohhh!";
+        imgElement.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2d3YWR4djliMnAzb3U3bWVseTc1a2RubTNxamlvM2tpeThlNnlweCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/901mxGLGQN2PyCQpoc/giphy.gif"; 
+        
+        noBtn.style.position = 'fixed';
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 50);
+        noBtn.style.left = x + 'px';
+        noBtn.style.top = y + 'px';
+    }
+</script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret 💌</title>
+    <style>
+        body { background-color: #e6e6ff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .card { background: white; padding: 40px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; width: 350px; position: relative; }
+        img { width: 250px; height: 250px; object-fit: cover; border-radius: 15px; margin-bottom: 20px; }
+        h1 { color: #555; font-size: 1.2rem; margin-bottom: 30px; min-height: 3.5rem; }
+        input { width: 80%; padding: 12px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd; outline: none; text-align: center; }
+        .btn { padding: 12px 25px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; background-color: #b3b3ff; color: white; transition: 0.3s; width: 100%; }
+        .btn:hover { background-color: #9999ff; }
+        .btn-container { display: flex; justify-content: center; height: 50px; gap: 20px; }
+        #noBtn { position: absolute; z-index: 999; display: none; }
+        #messageInput { display: none; }
+    </style>
+</head>
+<body>
+
+<audio id="happyMusic"><source src="https://www.myinstants.com/media/sounds/happy-happy-happy-song.mp3" type="audio/mpeg"></audio>
+
+<div class="card" id="loginCard">
+    <h1>Sino 'to? 😊</h1>
+    <input type="text" id="userName" placeholder="Enter your name..." autocomplete="off">
+    <button class="btn" onclick="startApp()">Enter</button>
+</div>
+
+<div class="card" id="mainCard" style="display:none;">
+    <img id="displayImg" src="https://media.giphy.com/media/6hKL8BI8rRNrMRFtAx/giphy.gif">
+    <h1 id="text">Hi!</h1>
+    <input type="text" id="messageInput" placeholder="May sasabihin ka ba?">
+    <div class="btn-container">
+        <button id="mainBtn" class="btn" onclick="nextStep()">tap tap</button>
+        <button id="noBtn" class="btn" onmouseover="moveNo()">No</button>
+    </div>
+</div>
+
+<script>
+    let step = 0;
+    let userName = "";
+    let canMoveNo = true;
+
+    const steps = [
+        { text: "Wait lang... may itatanong sana ako.", img: "https://media.giphy.com/media/BNlSrpW0e4nbgVZ2we/giphy.gif", btn: "Ano yun?" },
+        { text: "Valentines is so so so so so malapit na right?!", img: "https://media.giphy.com/media/LBb735fuQwRKAVzN23/giphy.gif", btn: "Kaya nga eh" },
+        { text: "Gusto mo ba humabol idol?", img: "https://media.giphy.com/media/pY8jLmZw0ElqvVeRH4/giphy.gif", btn: "Paano?" },
+        { text: "Will you be my Valentine?", img: "https://media.giphy.com/media/pY8jLmZw0ElqvVeRH4/giphy.gif", btn: "Yes! ❤️" }
+    ];
+
+    function startApp() {
+        const inputVal = document.getElementById('userName').value.trim();
+        
+        if (inputVal.toLowerCase() === "admin") {
+            const pass = prompt("Verification required:");
+            if (pass === "12345") {
+                window.location.href = "admin.html"; // Changed to .html
+                return;
+            } else {
+                alert("Unauthorized!");
+                return;
+            }
+        }
+
+        if (inputVal !== "") {
+            userName = inputVal;
+            document.getElementById('loginCard').style.display = 'none';
+            document.getElementById('mainCard').style.display = 'block';
+            document.getElementById('text').innerText = "Hi " + userName + "!";
+        }
+    }
+
+    function nextStep() {
+        const textElement = document.getElementById('text');
+        const imgElement = document.getElementById('displayImg');
+        const mainBtn = document.getElementById('mainBtn');
+        const noBtn = document.getElementById('noBtn');
+
+        if (step < steps.length) {
+            textElement.innerHTML = steps[step].text;
+            imgElement.src = steps[step].img;
+            mainBtn.innerHTML = steps[step].btn;
+            noBtn.style.display = (step === 3) ? 'block' : 'none';
+            step++;
+        } else if (step === steps.length) {
+            textElement.innerText = "May gusto ka pa ba sabihin?";
+            document.getElementById('messageInput').style.display = 'block';
+            mainBtn.innerText = "Submit Answer";
+            step++;
+        } else {
+            saveResponse();
+        }
+    }
+
+    function saveResponse() {
+        const customMsg = document.getElementById('messageInput').value;
+        
+        // Use Formspree to send the data to your email
+        fetch('https://formspree.io/f/YOUR_ID_HERE', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: userName,
+                answer: 'YES! ❤️',
+                message: customMsg
+            }),
+            headers: { 'Content-Type': 'application/json' }
+        }).finally(() => {
+            // Success animation
+            canMoveNo = false; 
+            document.getElementById('text').innerHTML = "Yon ohhh! <br> Do you want some flowers?";
+            document.getElementById('displayImg').src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2d3YWR4djliMnAzb3U3bWVseTc1a2RubTNxamlvM2tpeThlNnlweCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/BNlSrpW0e4nbgVZ2we/giphy.gif";
+            
+            const mainBtn = document.getElementById('mainBtn');
+            mainBtn.innerText = "Yes";
+            mainBtn.onclick = () => { window.location.href = "flowers-main/index.html"; };
+            
+            const noBtn = document.getElementById('noBtn');
+            noBtn.innerText = "No";
+            noBtn.style.display = 'block';
+            noBtn.style.position = 'relative';
+            noBtn.style.left = 'auto';
+            noBtn.style.top = 'auto';
+            noBtn.onmouseover = null;
+            noBtn.onclick = () => { 
+                document.getElementById('text').innerHTML = "Okay, see you soon! 🥰"; 
+                noBtn.style.display = 'none'; 
+                mainBtn.style.display = 'none'; 
+            };
+
+            document.getElementById('messageInput').style.display = 'none';
+            document.getElementById('happyMusic').play();
+        });
+    }
+
+    function moveNo() {
+        if (!canMoveNo) return;
+        const noBtn = document.getElementById('noBtn');
+        noBtn.style.position = 'fixed';
+        noBtn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+        noBtn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+    }
+</script>
+</body>
+</html>
