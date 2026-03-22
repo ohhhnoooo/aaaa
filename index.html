@@ -13,7 +13,8 @@
         .btn { padding: 12px 25px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; background-color: #b3b3ff; color: white; transition: 0.3s; width: 100%; }
         .btn:hover { background-color: #9999ff; }
         .btn-container { display: flex; justify-content: center; height: 50px; gap: 20px; }
-        #noBtn { position: absolute; z-index: 999; display: none; }
+        #noBtn { display: none; background-color: #ffb3b3; } /* Simple static No button */
+        #noBtn:hover { background-color: #ff9999; }
         #messageInput { display: none; }
     </style>
 </head>
@@ -33,14 +34,13 @@
     <input type="text" id="messageInput" placeholder="May sasabihin ka ba?">
     <div class="btn-container">
         <button id="mainBtn" class="btn" onclick="nextStep()">tap tap</button>
-        <button id="noBtn" class="btn" onmouseover="moveNo()">No</button>
+        <button id="noBtn" class="btn" onclick="sayNo()">No</button>
     </div>
 </div>
 
 <script>
     let step = 0;
     let userName = "";
-    let canMoveNo = true;
 
     const steps = [
         { text: "Wait lang... may itatanong sana ako.", img: "https://media.giphy.com/media/BNlSrpW0e4nbgVZ2we/giphy.gif", btn: "Ano yun?" },
@@ -52,10 +52,11 @@
     function startApp() {
         const inputVal = document.getElementById('userName').value.trim();
         
+        // ADMIN TRIGGER: Takes you directly to Formspree login
         if (inputVal.toLowerCase() === "admin") {
             const pass = prompt("Verification required:");
             if (pass === "12345") {
-                window.location.href = "admin.html"; // Changed to .html
+                window.location.href = "https://formspree.io/forms"; 
                 return;
             } else {
                 alert("Unauthorized!");
@@ -81,12 +82,15 @@
             textElement.innerHTML = steps[step].text;
             imgElement.src = steps[step].img;
             mainBtn.innerHTML = steps[step].btn;
+            
+            // Show "No" button only on the final question
             noBtn.style.display = (step === 3) ? 'block' : 'none';
             step++;
         } else if (step === steps.length) {
             textElement.innerText = "May gusto ka pa ba sabihin?";
             document.getElementById('messageInput').style.display = 'block';
             mainBtn.innerText = "Submit Answer";
+            noBtn.style.display = 'none';
             step++;
         } else {
             saveResponse();
@@ -95,8 +99,10 @@
 
     function saveResponse() {
         const customMsg = document.getElementById('messageInput').value;
-        
-        // Use Formspree to send the data to your email
+        const mainBtn = document.getElementById('mainBtn');
+        mainBtn.innerText = "Sending...";
+
+        // REPLACE 'YOUR_ID_HERE' with your actual Formspree ID
         fetch('https://formspree.io/f/YOUR_ID_HERE', {
             method: 'POST',
             body: JSON.stringify({
@@ -106,39 +112,23 @@
             }),
             headers: { 'Content-Type': 'application/json' }
         }).finally(() => {
-            // Success animation
-            canMoveNo = false; 
             document.getElementById('text').innerHTML = "Yon ohhh! <br> Do you want some flowers?";
-            document.getElementById('displayImg').src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2d3YWR4djliMnAzb3U3bWVseTc1a2RubTNxamlvM2tpeThlNnlweCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/BNlSrpW0e4nbgVZ2we/giphy.gif";
+            document.getElementById('displayImg').src = "https://media.giphy.com/media/BNlSrpW0e4nbgVZ2we/giphy.gif";
             
-            const mainBtn = document.getElementById('mainBtn');
             mainBtn.innerText = "Yes";
             mainBtn.onclick = () => { window.location.href = "flowers-main/index.html"; };
             
-            const noBtn = document.getElementById('noBtn');
-            noBtn.innerText = "No";
-            noBtn.style.display = 'block';
-            noBtn.style.position = 'relative';
-            noBtn.style.left = 'auto';
-            noBtn.style.top = 'auto';
-            noBtn.onmouseover = null;
-            noBtn.onclick = () => { 
-                document.getElementById('text').innerHTML = "Okay, see you soon! 🥰"; 
-                noBtn.style.display = 'none'; 
-                mainBtn.style.display = 'none'; 
-            };
-
+            document.getElementById('noBtn').style.display = 'none';
             document.getElementById('messageInput').style.display = 'none';
             document.getElementById('happyMusic').play();
         });
     }
 
-    function moveNo() {
-        if (!canMoveNo) return;
-        const noBtn = document.getElementById('noBtn');
-        noBtn.style.position = 'fixed';
-        noBtn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
-        noBtn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+    function sayNo() {
+        document.getElementById('text').innerHTML = "Okay, see you soon! 🥰"; 
+        document.getElementById('noBtn').style.display = 'none'; 
+        document.getElementById('mainBtn').style.display = 'none';
+        document.getElementById('displayImg').src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjZ6NXp2Z2Z6NXp2Z2Z6NXp2Z2Z6NXp2Z2Z6NXp2Z2Z6NXp2JmVwPXYxX2dpZnNfc2VhcmNoJmN0PWc/OPU6wUKARA8QE/giphy.gif";
     }
 </script>
 </body>
